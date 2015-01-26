@@ -1,17 +1,27 @@
 cmake_minimum_required(VERSION 2.4.6)
-include($ENV{ROS_ROOT}/core/rosbuild/rosbuild.cmake)
 
-# Append to CPACK_SOURCE_IGNORE_FILES a semicolon-separated list of
-# directories (or patterns, but directories should suffice) that should
-# be excluded from the distro.  This is not the place to put things that
-# should be ignored everywhere, like "build" directories; that happens in
-# rosbuild/rosbuild.cmake.  Here should be listed packages that aren't
-# ready for inclusion in a distro.
-#
-# This list is combined with the list in rosbuild/rosbuild.cmake.  Note
-# that CMake 2.6 may be required to ensure that the two lists are combined
-# properly.  CMake 2.4 seems to have unpredictable scoping rules for such
-# variables.
-#list(APPEND CPACK_SOURCE_IGNORE_FILES /core/experimental)
+project(soem_master)
 
-rosbuild_make_distribution(0.1.0)
+# Set the CMAKE_PREFIX_PATH in case you're not using Orocos through
+# ROS for helping these find commands find RTT.
+find_package(OROCOS-RTT REQUIRED ${RTT_HINTS} )
+
+# Defines the orocos_* cmake macros. See that file for additional
+# documentation.
+include(${OROCOS-RTT_USE_FILE_PATH}/UseOROCOS-RTT.cmake)
+
+find_package(soem REQUIRED)
+include_directories(${soem_INCLUDE_DIRS})
+
+#common commands for building c++ executables and libraries
+orocos_library(soem_driver_factory soem_driver_factory.cpp)
+orocos_component(soem_master soem_master_component.cpp)
+target_link_libraries(soem_master soem_driver_factory ${soem_LIBRARIES})
+
+orocos_plugin(soem_plugin soem_plugin.cpp)
+
+orocos_install_headers( soem_driver.h soem_driver_factory.h)
+install(PROGRAMS setcap.sh DESTINATION lib/${PROJECT_NAME})
+
+orocos_generate_package( INCLUDE_DIRS ..)
+
