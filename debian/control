@@ -1,0 +1,12 @@
+Source: ros-indigo-soem-beckhoff-drivers
+Section: misc
+Priority: extra
+Maintainer: Ruben Smits <ruben@intermodalics.eu>
+Build-Depends: debhelper (>= 9.0.0), ros-indigo-catkin, ros-indigo-message-generation, ros-indigo-rtt, ros-indigo-rtt-roscomm, ros-indigo-soem, ros-indigo-soem-master
+Homepage: http://wiki.ros.org/soem_master
+Standards-Version: 3.9.2
+
+Package: ros-indigo-soem-beckhoff-drivers
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-indigo-message-runtime, ros-indigo-rtt, ros-indigo-rtt-roscomm, ros-indigo-soem, ros-indigo-soem-master
+Description: soem_beckhoff_drivers contains drivers for the ethercat beckhoff modules to work together with the soem_master package, every module creates the necessary services, dataports and properties for its own functionality.
